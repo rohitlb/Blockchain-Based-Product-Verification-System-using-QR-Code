@@ -1,0 +1,106 @@
+# Using Thunder Client to Test Endpoints
+
+## Part 1: What is Thunder Client and How to Use It
+Thunder Client is a lightweight REST API client built as a VS Code extension. 
+It allows developers to test REST API endpoints directly from their code editor without the need for external tools like Postman.
+
+### Key Features of Thunder Client
+- Create and save API requests.
+- Support for HTTP methods (`GET`, `POST`, `PUT`, `DELETE`, etc.).
+- Easily send JSON, form data, and query parameters.
+- View responses in JSON, text, or raw format.
+- Organize requests in collections.
+- Export and import requests for sharing or backup.
+
+### Installing Thunder Client
+1. Open VS Code.
+2. Go to the **Extensions** view (`Ctrl+Shift+X`).
+3. Search for "Thunder Client."
+4. Click "Install."
+
+### Accessing Thunder Client
+1. Click on the Thunder Client icon in the activity bar on the left.
+2. Use the interface to create and test requests.
+
+## Part 2: Testing the Current Endpoints
+The following endpoints from our code file can be tested using Thunder Client:
+
+### 1. `/api/addProduct` (Add Product)
+**Method:** `POST`
+
+**Request Body (JSON):**
+```json
+{
+  "productId": 123,
+  "name": "Product Name",
+  "manufactureDate": "2025-01-01",
+  "batch": "Batch001"
+}
+```
+
+**Steps:**
+1. Open Thunder Client and create a new request.
+2. Select `POST` as the method and enter the URL: `http://localhost:3001/api/addProduct`.
+3. In the **Body** tab, select `JSON` and paste the example request body.
+4. Click **Send**.
+
+**Expected Response:**
+```json
+{
+  "message": "Data processed successfully",
+  "qrCode": "data:image/png;base64,iVBOR..."
+}
+```
+
+**Verification:**
+- Copy the `qrCode` value and paste it into a browser to view the QR code.
+
+---
+
+### 2. `/api/verifyQR` (Verify QR Code)
+**Method:** `POST`
+
+**Request Body (JSON):**
+```json
+{
+  "productId": 123,
+  "qrCode": "data:image/png;base64,iVBOR..."
+}
+```
+
+**Steps:**
+1. Open Thunder Client and create a new request.
+2. Select `POST` as the method and enter the URL: `http://localhost:3001/api/verifyQR`.
+3. In the **Body** tab, select `JSON` and paste the example request body.
+4. Replace the `qrCode` value with the Base64 string received from the `/api/addProduct` endpoint.
+5. Click **Send**.
+
+**Expected Response:**
+- For a valid QR code:
+  ```json
+  {
+    "message": "QR Code is valid and matches the product."
+  }
+  ```
+- For an invalid QR code:
+  ```json
+  {
+    "message": "QR Code does not match the product."
+  }
+  ```
+
+---
+
+### 3. `/` (HTML Interface)
+**Method:** `GET`
+
+**Steps:**
+1. Open a browser and navigate to `http://localhost:3001/`.
+2. Interact with the HTML interface for adding products and verifying QR codes.
+
+---
+
+## Additional Notes - less important, but we should document these json requests so that it can be reused
+1. Use Thunder Client Collections to organize all your requests.
+2. Export the requests from Thunder Client for backup or sharing with your team.
+3. Always use environment variables for the base URL in Thunder Client to avoid hardcoding URLs.
